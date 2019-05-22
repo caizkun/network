@@ -19,6 +19,7 @@ void setup_client() {
     char buffer[1024] = {0};
     
     // create a client socket
+    printf("[CLIENT] creates a socket\n");
     if ((client_fd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
         perror("client socket failed");
         exit(EXIT_FAILURE);
@@ -30,13 +31,13 @@ void setup_client() {
     server_addr.sin_port = htons(PORT);
 
     // convert IP address from text to binary from
-    if (inet_pton(AF_INET, "127.0.0.1", &server_addr.sin_addr) <= 0) {
+    if (inet_pton(AF_INET, IP_ADDR, &server_addr.sin_addr) <= 0) {
         perror("invalid address");
         exit(EXIT_FAILURE);
     }
 
     // connect
-    printf("connect client to server\n");
+    printf("[CLIENT] connects to server\n");
     if (connect(client_fd, (struct sockaddr *) &server_addr, sizeof(server_addr)) < 0) {
         perror("connection failed");
         exit(EXIT_FAILURE);
@@ -44,8 +45,9 @@ void setup_client() {
 
     // send request
     send(client_fd, message, strlen(message), 0);
-    printf("Message sent from client\n");
+    printf("[CLIENT] message sent from client\n");
     valread = read(client_fd, buffer, 1024);
+    printf("[CLIENT] received message: ");
     printf("%s\n", buffer);
     return;
 }
