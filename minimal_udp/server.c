@@ -52,6 +52,9 @@ void setup_server() {
     sendto(server_fd, (const char*) message, strlen(message), 
             0, (const struct sockaddr *) &client_addr, addr_len);
     printf("[SERVER] message sent from server\n");
+
+    close(server_fd);
+    return;
 }
 
 
