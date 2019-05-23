@@ -33,9 +33,10 @@ void setup_server() {
     server_addr.sin_family = AF_INET;
     server_addr.sin_addr.s_addr = INADDR_ANY;
     server_addr.sin_port = htons(PORT);
+    //printf("%d\n", server_addr.sin_addr.s_addr);
 
     // bind
-    printf("[SERVER] binds to IP and port\n");
+    printf("[SERVER] binds to IP and port ...\n");
     if (bind(server_fd, (struct sockaddr *) &server_addr, 
                             sizeof(server_addr)) < 0) {
         perror("bind failed");
@@ -44,9 +45,10 @@ void setup_server() {
 
     // Receive and send message
     int msg_len = 0;
-    socklen_t addr_len = 0;
+    socklen_t addr_len = sizeof(client_addr); // !! size is important
     msg_len = recvfrom(server_fd, buffer, MAXLEN, MSG_WAITALL,
                        (struct sockaddr *) &client_addr, &addr_len);
+    //printf("%d\n", client_addr.sin_addr.s_addr);
     buffer[msg_len] = '\0';
     printf("[SERVER] received message: %s\n", buffer);
     sendto(server_fd, (const char*) message, strlen(message), 
